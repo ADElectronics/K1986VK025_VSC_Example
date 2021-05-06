@@ -1,0 +1,181 @@
+{
+   "version": "2.0.0",
+   "tasks": [
+      {
+/* ====================================== Build Commands ====================================== */
+         "label": "Make Build",
+         "type": "shell",
+         "command": "make -s -j 2 all",
+         "options": {
+            "cwd": "${workspaceRoot}",
+            "shell": {
+               "executable": "cmd.exe",
+               "args": ["/C"]
+            }
+         },
+         "problemMatcher": ["$gcc"]
+      },
+      {
+         "label": "Make Clean",
+         "type": "shell",
+         "command": "make -s clean",
+         "options": {
+            "cwd": "${workspaceRoot}",
+            "shell": {
+               "executable": "cmd.exe",
+               "args": ["/C"]
+            }
+         },
+         "problemMatcher": ["$gcc"]
+      },
+/* ====================================== Check AXF Commands ====================================== */
+      {
+         "label": "Check Flash Size",
+         "type": "shell",
+         "command": "riscv-none-embed-nm.exe --print-size --size-sort --radix=d build/firmware.elf",
+         "options": {
+            "cwd": "${workspaceRoot}",
+            "shell": {
+               "executable": "cmd.exe",
+               "args": ["/C"]
+            }
+         },
+         "problemMatcher": []
+      },
+/* ====================================== JLink Commands ====================================== */
+      {
+         "label": "JLink - Start GDB Server (RISC-V)",
+         "type": "shell",
+         "command": "JLinkGDBServer.exe",
+         "args": [
+            "-select",
+            "USB",
+            "-device",
+            "risc-v",
+            "-jtagconf",
+            "-1,-1",
+            "-If",
+            "JTAG",
+            "-Speed",
+            "4000",
+            "-ir"
+         ],
+         "options": {
+            "cwd": "${workspaceRoot}",
+            "shell": {
+               "executable": "cmd.exe",
+               "args": ["/C"]
+            }
+         },
+         "problemMatcher": []
+      },
+      {
+         "label": "Write to Flash MCU (GDB)",
+         "type": "shell",
+         "command": "riscv-none-embed-gdb.exe",
+         "args": [
+            "-q",
+            "-x",
+            "JLink/gdb_write_flash.txt"
+         ],
+         "options": {
+            "cwd": "${workspaceRoot}",
+            "shell": {
+               "executable": "cmd.exe",
+               "args": ["/C"]
+            }
+         },
+         "problemMatcher": []
+      },
+      {
+         "label": "Erase Flash MCU (GDB)",
+         "type": "shell",
+         "command": "riscv-none-embed-gdb.exe",
+         "args": [
+            "-q",
+            "-x",
+            "JLink/gdb_erase_flash.txt"
+         ],
+         "options": {
+            "cwd": "${workspaceRoot}",
+            "shell": {
+               "executable": "cmd.exe",
+               "args": ["/C"]
+            }
+         },
+         "problemMatcher": []
+      },
+      {
+         "label": "Read Boot OTP MCU",
+         "type": "shell",
+         "command": "JLink.exe",
+         "args": [
+            "-device",
+            "risc-v",
+            "-jtagconf",
+            "-1,-1",
+            "-If",
+            "JTAG",
+            "-Speed",
+            "12000",
+            "JLink/ReadBootOTP.JLinkScript"
+         ],
+         "options": {
+            "cwd": "${workspaceRoot}",
+            "shell": {
+               "executable": "cmd.exe",
+               "args": ["/C"]
+            }
+         },
+         "problemMatcher": []
+      },
+      {
+         "label": "Read Full Flash MCU",
+         "type": "shell",
+         "command": "JLink.exe",
+         "args": [
+            "-device",
+            "risc-v",
+            "-jtagconf",
+            "-1,-1",
+            "-If",
+            "JTAG",
+            "-Speed",
+            "4000",
+            "JLink/ReadMCU.JLinkScript"
+         ],
+         "options": {
+            "cwd": "${workspaceRoot}",
+            "shell": {
+               "executable": "cmd.exe",
+               "args": ["/C"]
+            }
+         },
+         "problemMatcher": []
+      },
+      {
+         "label": "Run in RAM",
+         "type": "shell",
+         "command": "JLink.exe",
+         "args": [
+            "-device",
+            "risc-v",
+            "-jtagconf",
+            "-1,-1",
+            "-If",
+            "JTAG",
+            "-Speed",
+            "4000",
+            "JLink/RunInRAM.JLinkScript"
+         ],
+         "options": {
+            "cwd": "${workspaceRoot}",
+            "shell": {
+               "executable": "cmd.exe",
+               "args": ["/C"]
+            }
+         },
+         "problemMatcher": []
+      },
+   ]
+}

@@ -1,0 +1,10 @@
+r
+
+loadbin build\Firmware_RAM.bin, 0x80000000
+//verifybin build\Firmware_RAM.bin, 0x80000000
+
+wreg "PC" 0x80000000
+//wreg "X2" 0x8000f000
+
+g
+q

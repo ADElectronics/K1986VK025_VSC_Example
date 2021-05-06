@@ -1,0 +1,5 @@
+r
+savebin build\Firmware_Read.bin, 0x10000000, 0x40000
+r
+g
+q

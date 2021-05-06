@@ -1,0 +1,10 @@
+{
+	//"cortex-debug.armToolchainPath": "C:/Program Files (x86)/Microsoft Visual Studio/2017/Professional/Linux/gcc_arm/bin",
+	"cortex-debug.enableTelemetry": false,
+	"cortex-debug.JLinkGDBServerPath": "JLinkGDBServerCL.exe",
+	//"cortex-debug.registerUseNaturalFormat": false,
+   "cortex-debug.armToolchainPrefix": "riscv-none-embed",
+   "files.associations": {
+      "window_table.h": "c"
+   }
+}

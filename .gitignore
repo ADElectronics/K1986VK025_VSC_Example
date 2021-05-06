@@ -1,0 +1,6 @@
+# Build
+/build/*
+
+# Ozone
+Firmware.jdebug.user
+Firmware.jdebug

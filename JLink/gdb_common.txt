@@ -1,0 +1,38 @@
+#===============================================================================
+# GDB connection 
+#===============================================================================
+
+set remotetimeout 5000
+target remote : 2331
+
+#===============================================================================
+# GDB Settings
+#===============================================================================
+
+set verbose off
+set complaints 0
+set confirm off
+set exec-done-display off
+show exec-done-display
+set trace-commands off
+set debug displaced off 
+set debug expression 0
+set debug frame 0
+set debug infrun 0
+set debug observer 0
+set debug overload 0
+set pagination off
+set print address off
+set print symbol-filename off
+set print symbol off
+set print pretty off
+set print object off
+#set debug notification off
+set debug parser off
+set debug remote 0
+#set index-cache off
+set mem inaccessible-by-default off
+set arch riscv:rv32
+
+monitor reset 1
+monitor sleep 20

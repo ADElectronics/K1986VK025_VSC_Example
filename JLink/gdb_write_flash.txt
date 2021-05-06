@@ -1,0 +1,96 @@
+source JLink/gdb_common.txt
+source JLink/gdb_writefile.txt
+
+set $FlashAddr = 0x10000000
+
+# Registers
+set $EEPROM_CMD = 0x40018000
+set $EEPROM_ADR = 0x40018004
+set $EEPROM_DI = 0x40018008
+set $EEPROM_DO = 0x4001800C
+set $EEPROM_KEY = 0x40018010
+set $PER2_CLOCK = 0x4002001C
+set $CPU_CLOCK = 0x4002000C
+
+#===============================================================================
+# Functions definition
+#===============================================================================
+
+define flash_erase
+   printf "Erase flash ...\n"
+
+   set {int}($PER2_CLOCK) = 0xFFFFFFFF
+
+   set $Temp = 0x0
+   set $Temp = {int}($CPU_CLOCK)
+   set $Temp = ($Temp & ~(3 << 8))
+
+   set {int}($CPU_CLOCK) = $Temp
+
+   set {int}($EEPROM_KEY) = 0x8AAA5551
+   set {int}($EEPROM_CMD) = 0x00004201
+   set {int}($EEPROM_ADR) = 0x00000000
+   set {int}($EEPROM_DI) = 0x00000000
+
+   set {int}($EEPROM_CMD) = 0x00004E41
+   monitor sleep 1
+   set {int}($EEPROM_CMD) = 0x00006E41
+   monitor sleep 200
+   set {int}($EEPROM_CMD) = 0x00006A41
+   monitor sleep 20
+   set {int}($EEPROM_CMD) = 0x00004201
+   set {int}($EEPROM_CMD) = 0x00004000
+end
+
+define flash_release
+   printf "Release flash ...\n"
+   set {int}($PER2_CLOCK) = 0x00000018
+   set {int}($EEPROM_CMD) = 0x00004008
+   set {int}($EEPROM_KEY) = 0x00000000
+   set {int}($PER2_CLOCK) = 0x00000010
+end
+
+define flash_write
+   printf "Write to flash ...\n"
+
+   set $Addr = $arg0
+   set $Size = $arg1
+
+   #set $Addr = $FlashAddr + $Addr
+   set {int}($PER2_CLOCK) = 0xFFFFFFFF
+   set {int}($EEPROM_KEY) = 0x8AAA5551
+   set {int}($EEPROM_CMD) = 0x00004001
+
+   while ($Size > 0)
+      #printf "Size Left: %d\n", $Size
+      set {int}($EEPROM_ADR) = ($Addr + $FlashAddr)
+      #set {int}($EEPROM_DI) = $Data
+      restore build/Firmware.bin binary ($EEPROM_DI-$Addr) ($Addr) ($Addr+4)
+      #monitor sleep 2
+      set {int}($EEPROM_CMD) = 0x00005041
+      #monitor sleep 1
+      set {int}($EEPROM_CMD) = 0x00007041
+      #monitor sleep 2
+      set {int}($EEPROM_CMD) = 0x000070C1
+      #monitor sleep 4
+      set {int}($EEPROM_CMD) = 0x00007041
+      set {int}($EEPROM_CMD) = 0x00006041
+      #monitor sleep 1
+      set {int}($EEPROM_CMD) = 0x00004001
+      #monitor sleep 1
+      set $Addr = $Addr + 4
+      set $Size = $Size - 4
+   end
+
+   set {int}($EEPROM_CMD) = 0x00004000
+end
+
+#===============================================================================
+# App Start
+#===============================================================================
+
+flash_erase
+flash_write $StartAddr $FileSize
+flash_release
+
+q

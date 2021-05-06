@@ -1,0 +1,32 @@
+{
+	"env":
+	{
+		"RISCV_GCC_TOOLCHAIN": "C:/Data/GCC/RISC-V/gcc-8.3.0-2.3"
+	},
+	"configurations": [
+		{
+			"name": "risc-v_c_cpp_properties",
+			"compilerPath": "${env.RISCV_GCC_TOOLCHAIN}/bin/riscv-none-embed-gcc.exe",
+			"includePath": [
+				"${env.RISCV_GCC_TOOLCHAIN}/riscv-none-embed/include/**",
+				"${env.RISCV_GCC_TOOLCHAIN}/riscv-none-embed/include/sys/**",
+				"${env.RISCV_GCC_TOOLCHAIN}/lib/**",
+
+				"${workspaceRoot}/Drivers/**",
+				"${workspaceRoot}/DriversExt/**",
+				"${workspaceRoot}/Src/**",
+				"${workspaceRoot}/Inc/**"
+			],
+			"defines": [
+				"RISCV_ALL_FFT_TABLES",
+				"__SYSTEM_CLOCK_108M_PLL_HXTAL=108000000",
+				"HXTAL_VALUE=25000000",
+				"rv32imac"
+			],
+			"cStandard": "c11",
+			"cppStandard": "c++17",
+			"intelliSenseMode": "gcc-x64"
+		}
+	],
+	"version": 4
+}

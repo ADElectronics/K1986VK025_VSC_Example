@@ -1,0 +1,6 @@
+r
+
+savebin build/Firmware_Read_OTP.bin 0x20000 0x1000
+
+g
+q
